@@ -1,9 +1,15 @@
 import InvalidBodyError from '../errors/InvalidBodyError';
 import * as questionsService from '../services/questionsService';
 import * as questionsModel from '../models/questionsModel';
+import NewQuestion from '../interfaces/NewQuestion';
+import NotAnsweredQuestion from '../interfaces/NotAnsweredQuestion';
+import AnsweredQuestion from '../interfaces/AnsweredQuestion';
+import NotFoundError from '../errors/NotFoundError';
+
+const ID_TEST = 2;
 
 describe('POST questions/', () => {
-  const inputData = {
+  const inputData: NewQuestion = {
     question: 'Uki ta contecendo?',
     student: 'Zoru',
     grade: 'T3',
@@ -11,22 +17,78 @@ describe('POST questions/', () => {
   };
 
   test('send invalid input data', async () => {
-    const promise = questionsService
+    const result = questionsService
       .validateAndCreateNewQuestion({
         ...inputData,
         grade: '',
       });
 
-    expect(promise).rejects.toThrowError(InvalidBodyError);
+    expect(result).rejects.toThrowError(InvalidBodyError);
   });
 
   test('send valid input data', async () => {
     jest.spyOn(questionsModel, 'insertNewQuestion')
-      .mockImplementationOnce(async () => 2);
+      .mockImplementationOnce(async () => ID_TEST);
 
-    const promise = await questionsService
+    const result = await questionsService
       .validateAndCreateNewQuestion(inputData);
 
-    expect(promise).toEqual(2);
+    expect(result).toEqual(ID_TEST);
+  });
+});
+
+describe('GET /questions/:id', () => {
+  const notAnsweredQuestion: NotAnsweredQuestion = {
+    question: 'Uki ta contecendo?',
+    student: 'Zoru',
+    grade: 'T3',
+    tags: 'typescript, vida, javascript, java?',
+    answered: false,
+    submitAt: '2021-01-01 10:12',
+  };
+
+  const answeredQuestion: AnsweredQuestion = {
+    question: 'Uki ta contecendo?',
+    student: 'Zoru',
+    grade: 'T3',
+    tags: 'typescript, vida, javascript, java?',
+    answered: true,
+    submitAt: '2021-01-01 10:12',
+    answeredAt: '2021-01-01 10:30',
+    answeredBy: 'Vegeta',
+    answer: 'É mais de 8 miiiil!',
+  };
+
+  test('Not found question', async () => {
+    jest.spyOn(questionsModel, 'findQuestionById')
+      .mockImplementationOnce(async () => null);
+
+    const result = questionsService.search(ID_TEST);
+
+    expect(result).rejects.toThrowError(NotFoundError);
+  });
+
+  test('Answered question', async () => {
+    jest.spyOn(questionsModel, 'findQuestionById')
+      .mockImplementationOnce(async () => ({
+        ...answeredQuestion,
+        id: ID_TEST,
+      }));
+
+    const result = await questionsService.search(ID_TEST);
+
+    expect(result).toEqual(answeredQuestion);
+  });
+
+  test('Not answered question', async () => {
+    jest.spyOn(questionsModel, 'findQuestionById')
+      .mockImplementationOnce(async () => ({
+        ...notAnsweredQuestion,
+        id: ID_TEST,
+      }));
+
+    const result = await questionsService.search(ID_TEST);
+
+    expect(result).toEqual(notAnsweredQuestion);
   });
 });

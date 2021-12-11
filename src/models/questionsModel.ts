@@ -17,4 +17,10 @@ export const insertNewQuestion = async (questionData: NewQuestion): Promise<numb
   return result.rows[0].id;
 };
 
-export const test = '';
+export const findQuestionById = async (id: number) => {
+  const result = await connection.query(`
+    SELECT * FROM questions WHERE id = $1;
+  `, [id]);
+
+  return result.rows[0] || null;
+};

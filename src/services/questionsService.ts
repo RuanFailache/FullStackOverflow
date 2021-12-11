@@ -1,5 +1,8 @@
 import InvalidBodyError from '../errors/InvalidBodyError';
+import NotFoundError from '../errors/NotFoundError';
+import AnsweredQuestion from '../interfaces/AnsweredQuestion';
 import NewQuestion from '../interfaces/NewQuestion';
+import NotAnsweredQuestion from '../interfaces/NotAnsweredQuestion';
 import * as questionsModel from '../models/questionsModel';
 
 export const validateAndCreateNewQuestion = async (inputData: NewQuestion): Promise<number> => {
@@ -10,15 +13,20 @@ export const validateAndCreateNewQuestion = async (inputData: NewQuestion): Prom
   const isGradeValid = /T([1-9]|[1-9][0-9]){1,2}/.test(grade);
 
   if (!isQuestionValid || !isStudentValid || !isGradeValid) {
-    console.log({
-      isGradeValid,
-      isQuestionValid,
-      isStudentValid,
-    });
     throw new InvalidBodyError('Invalid input data!');
   }
 
   return questionsModel.insertNewQuestion(inputData);
 };
 
-export const test = '';
+export const search = async (id: number): Promise<AnsweredQuestion | NotAnsweredQuestion> => {
+  const question = await questionsModel.findQuestionById(id);
+
+  if (!question) {
+    throw new NotFoundError('Question not found');
+  }
+
+  delete question.id;
+
+  return question;
+};
