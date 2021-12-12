@@ -40,3 +40,11 @@ export const updateQuestion = async (submitData: SubmitAnswer, id: number) => {
 
   return result.rowCount > 0;
 };
+
+export const listQuestions = async () => {
+  const result = await connection.query(
+    'SELECT * FROM questions WHERE answered = false',
+  );
+
+  return result.rows;
+};

@@ -39,3 +39,14 @@ export const updateQuestion = async (req: Request, res: Response, next: NextFunc
       : next(err);
   }
 };
+
+export const getQuestions = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const questions = await questionsService.listNotAnsweredQuestions();
+    return res.send(questions);
+  } catch (err) {
+    return err.status
+      ? res.status(err.status).send(err.message)
+      : next(err);
+  }
+};

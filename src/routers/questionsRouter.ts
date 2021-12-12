@@ -7,5 +7,6 @@ const router = Router();
 router.post('/', questionsController.addNewQuestion);
 router.get('/:id', questionsController.getQuestion);
 router.post('/:id', userAuth, questionsController.updateQuestion);
+router.get('/', questionsController.getQuestions);
 
 export default router;

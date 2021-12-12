@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import InvalidBodyError from '../errors/InvalidBodyError';
 import NotFoundError from '../errors/NotFoundError';
 import ServerError from '../errors/ServerError';
@@ -61,4 +62,17 @@ export const answerQuestion = async (answer: string, user: string, id: number) =
   }
 
   return isAnswered;
+};
+
+export const listNotAnsweredQuestions = async () => {
+  let questions = await questionsModel.listQuestions();
+
+  questions = questions.map((question) => {
+    delete question.answeredBy;
+    delete question.answeredAt;
+    delete question.answer;
+    return question;
+  });
+
+  return questions;
 };
