@@ -1,5 +1,5 @@
 # Full Stack Overflow
-API to post and answer questions.
+API to post and answer questions. On this project, I used Typescript, Jest and Postgres. To tell the truth, this was my first project with Typescript, then I feel a little proud to see it's working!
 
 <br/>
 
