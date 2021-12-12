@@ -1,4 +1,6 @@
 import { v4 as uuid } from 'uuid';
+import ConflictError from '../errors/ConflictError';
+import InvalidBodyError from '../errors/InvalidBodyError';
 import NewUser from '../interfaces/NewUser';
 import * as userModel from '../models/userModel';
 
@@ -9,20 +11,16 @@ const registerUser = async (inputData: NewUser) => {
   const isNameValid = name.length > 3;
 
   if (!isGradeValid || !isNameValid) {
-    throw new Error('Deu ruim...');
+    throw new InvalidBodyError('Invalid name or grade!');
   }
 
   const userExists = await userModel.checkIfExists(inputData);
 
   if (userExists) {
-    throw new Error('Deu ruim...');
+    throw new ConflictError('Registered User');
   }
 
-  const token = uuid();
-
-  await userModel.insertNewUser(inputData, token);
-
-  return token;
+  return userModel.insertNewUser(inputData, uuid());
 };
 
 export default registerUser;

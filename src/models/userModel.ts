@@ -21,4 +21,6 @@ export const insertNewUser = async (inputData: NewUser, token: string) => {
       $1, $2, $3
     );
   `, [name, grade, token]);
+
+  return token;
 };
