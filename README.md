@@ -31,3 +31,9 @@ There some scripts to use while using the api, like:
 - ```GET /questions/``` list all not answered questions
   
 - ```POST /users``` create an user account
+  ```
+  {
+    "name": string,
+    "grade": "T" + number
+  }
+  ```
