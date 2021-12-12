@@ -1,9 +1,11 @@
 import InvalidBodyError from '../errors/InvalidBodyError';
 import NotFoundError from '../errors/NotFoundError';
+import ServerError from '../errors/ServerError';
 
 import AnsweredQuestion from '../interfaces/AnsweredQuestion';
 import NewQuestion from '../interfaces/NewQuestion';
 import NotAnsweredQuestion from '../interfaces/NotAnsweredQuestion';
+import SubmitAnswer from '../interfaces/SubmitAnswer';
 
 import * as questionsModel from '../models/questionsModel';
 
@@ -37,4 +39,26 @@ export const search = async (id: number): Promise<AnsweredQuestion | NotAnswered
   }
 
   return question;
+};
+
+export const answerQuestion = async (answer: string, user: string, id: number) => {
+  const isAnswerValid = answer.length > 3;
+
+  if (!isAnswerValid) {
+    throw new InvalidBodyError('Invalid input data!');
+  }
+
+  const submitData: SubmitAnswer = {
+    answer,
+    answeredBy: user,
+    answeredAt: new Date(),
+  };
+
+  const isAnswered = await questionsModel.updateQuestion(submitData, id);
+
+  if (!isAnswered) {
+    throw new ServerError();
+  }
+
+  return isAnswered;
 };

@@ -1,22 +1,21 @@
-import { Response, NextFunction } from 'express';
-import CustomRequest from './requestHelper';
+import { Request, Response, NextFunction } from 'express';
 import * as userModel from '../models/userModel';
 
-const userAuth = async (req: CustomRequest, res: Response, next: NextFunction) => {
-  const auth = req.headers?.authorization;
+const userAuth = async (req: Request, res: Response, next: NextFunction) => {
+  const { authorization } = req.headers;
 
-  if (!auth) {
+  if (!authorization) {
     return res.status(401).send('Acess yor account or register a new one!');
   }
 
-  const token = auth.replace('Bearer ', '');
-  const isTokenValid = await userModel.checkToken(token);
+  const token = authorization.replace('Bearer ', '');
+  const user = await userModel.checkToken(token);
 
-  if (!isTokenValid) {
+  if (!user) {
     return res.status(401).send('Acess yor account or register a new one!');
   }
 
-  req.token = token;
+  res.locals.user = user;
 
   return next();
 };
