@@ -25,7 +25,7 @@ describe('POST questions/', () => {
         grade: '',
       });
 
-    expect(result).rejects.toThrowError(InvalidBodyError);
+    await expect(result).rejects.toThrowError(InvalidBodyError);
   });
 
   test('send valid input data', async () => {
@@ -67,7 +67,7 @@ describe('GET /questions/:id', () => {
 
     const result = questionsService.search(ID_TEST);
 
-    expect(result).rejects.toThrowError(NotFoundError);
+    await expect(result).rejects.toThrowError(NotFoundError);
   });
 
   test('Answered question', async () => {
