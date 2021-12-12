@@ -15,7 +15,7 @@ export const insertNewUser = async (inputData: NewUser, token: string) => {
   const { name, grade } = inputData;
 
   await connection.query(`
-    INSERT INTO user (
+    INSERT INTO users (
       name, grade, token
     ) VALUES (
       $1, $2, $3
