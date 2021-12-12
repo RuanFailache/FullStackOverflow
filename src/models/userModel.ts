@@ -24,3 +24,12 @@ export const insertNewUser = async (inputData: NewUser, token: string) => {
 
   return token;
 };
+
+export const checkToken = async (token: string) => {
+  const result = await connection.query(
+    'SELECT * FROM users WHERE token = $1',
+    [token],
+  );
+
+  return result.rowCount > 0;
+};
