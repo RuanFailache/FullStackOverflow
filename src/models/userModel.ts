@@ -31,5 +31,7 @@ export const checkToken = async (token: string) => {
     [token],
   );
 
-  return result.rowCount > 0;
+  return result.rowCount > 0
+    ? result.rows[0].name
+    : null;
 };
