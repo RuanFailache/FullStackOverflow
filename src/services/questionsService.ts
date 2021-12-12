@@ -1,8 +1,10 @@
 import InvalidBodyError from '../errors/InvalidBodyError';
 import NotFoundError from '../errors/NotFoundError';
+
 import AnsweredQuestion from '../interfaces/AnsweredQuestion';
 import NewQuestion from '../interfaces/NewQuestion';
 import NotAnsweredQuestion from '../interfaces/NotAnsweredQuestion';
+
 import * as questionsModel from '../models/questionsModel';
 
 export const validateAndCreateNewQuestion = async (inputData: NewQuestion): Promise<number> => {
@@ -27,6 +29,12 @@ export const search = async (id: number): Promise<AnsweredQuestion | NotAnswered
   }
 
   delete question.id;
+
+  if (!question.answered) {
+    delete question.answeredAt;
+    delete question.answeredBy;
+    delete question.answer;
+  }
 
   return question;
 };

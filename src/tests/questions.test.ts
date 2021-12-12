@@ -1,10 +1,12 @@
 import InvalidBodyError from '../errors/InvalidBodyError';
-import * as questionsService from '../services/questionsService';
-import * as questionsModel from '../models/questionsModel';
+import NotFoundError from '../errors/NotFoundError';
+
 import NewQuestion from '../interfaces/NewQuestion';
 import NotAnsweredQuestion from '../interfaces/NotAnsweredQuestion';
 import AnsweredQuestion from '../interfaces/AnsweredQuestion';
-import NotFoundError from '../errors/NotFoundError';
+
+import * as questionsService from '../services/questionsService';
+import * as questionsModel from '../models/questionsModel';
 
 const ID_TEST = 2;
 
