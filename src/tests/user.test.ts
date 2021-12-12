@@ -1,10 +1,10 @@
 import InvalidBodyError from '../errors/InvalidBodyError';
+import ConflictError from '../errors/ConflictError';
 
 import NewUser from '../interfaces/NewUser';
 
 import registerUser from '../services/userService';
 import * as userModel from '../models/userModel';
-import ConflictError from '../errors/ConflictError';
 
 describe('POST /user', () => {
   const inputData: NewUser = {
